@@ -21,3 +21,13 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Other Projects #
+*#helloworld.html#
+*#visitcount.php#
+*.htaccess
+*.htaccess.swp
+*.index.php.swp
+*db
+*db.ini
+*dispaly_employee.php
