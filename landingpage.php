@@ -1,21 +1,49 @@
 <?php
-session_start();
-
-if(isset($_POST["logout"])){
-        session_destoy();
-        echo "user logged out";
-        return;
+try{
+	$config = parse_ini_file("databaseSettings.ini");
+	$dbh = new PDO($config['dsn'], $config['username'], $config['password']);
+    $dbh -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	
+	session_start();
+	$valid = true;
+	if(isset($_POST["emailInput"])){		
+		foreach($dbh->query("SELECT email, password FROM Student") as $row){
+			if($row[0] == $_POST['emailInput']){
+				if($row[1] == sha1($_POST['passwordInput'])){
+					$_SESSION["loggedin"] = true;
+					$valid = true;
+					header("Location: studentview.php");
+					exit();
+					echo "works";
+				}else{
+					$valid = false;
+				}
+			}else{
+				$valid = false;
+			}
+		}
+		foreach($dbh->query("SELECT email, password FROM Instructor") as $row){
+			if($row[0] == $_POST['emailInput']){
+				if($row[1] == sha1($_POST['passwordInput'])){
+					$_SESSION["loggedin"] = true;
+					$valid = TRUE;
+					header("Location: teacherview.php");
+					exit();
+					echo "works";
+				}else{
+					$valid = false;
+				}
+			}else{
+				$valid = false;
+			}
+		}
+	}
+}catch(PDOException $e){
+	print "Error! " .$e -> getMessage()."<br/>";
+	die();
 }
+	
 
-if(isset($_POST["userid"])){
-        if($_POST["userid"] == "Houghton" && $_POST["password"] == "snow"){
-                            $_SESSION["loggedin"] = true;
-                            echo "You logged in now!";
-                            return;
-        }else{
-                echo "incorrect username and password";
-        }
-}
 ?>
 
 <!doctype html>
@@ -58,23 +86,25 @@ if(isset($_POST["userid"])){
   <body class="text-center">
     
 <main class="form-signin">
-  <form action="studentview">
+  <form method="post" action="landingpage.php">
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <input type="email" class="form-control" name = "emailInput" id="floatingInput" placeholder="name@example.com">
       <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input type="password" class="form-control" name = "passwordInput" id="floatingPassword" placeholder="Password">
       <label for="floatingPassword">Password</label>
     </div>
+	
+	<?php $_SESSION["loggedin"] = false;
+	if(!$valid){ ?>
+	<div id="incorrect_info">
+		<p>Incorrect Info</p>
+	</div>
+	<?php } ?>
 
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
     <p class="mt-5 mb-3 text-muted">&copy; Tyler and Eric</p>
   </form>
