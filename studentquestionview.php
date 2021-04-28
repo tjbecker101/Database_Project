@@ -101,35 +101,40 @@ $c_id = $_SESSION['C_id'];
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-				foreach ($dbh->query("select question, option_A, option_B, option_C, option_D, option_E from Questions
+				$counter = 0;
+
+				foreach ($dbh->query("select question, option_A, option_B, option_C, option_D, option_E, question_ID from Questions
 					join Survey on survey_id=id where id = '$c_id' and option_A is not null;") as $q){
-					echo "<form>";
+					echo "<form method='post'>";
 						echo "<TR>";
 						echo "<TD>".$q[0]."</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' name = 'rating' > $q[1]";
+						echo "<input type = 'radio' value='Strongly Disagree' name = 'rating_$counter' > $q[1]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' name = 'rating' > $q[2]";
+						echo "<input type = 'radio' value='Disagree' name = 'rating_$counter' > $q[2]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' name = 'rating' > $q[3]";
+						echo "<input type = 'radio' value='Neutral' name = 'rating_$counter' > $q[3]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' name = 'rating' > $q[4]";
+						echo "<input type = 'radio' value='Agree' name = 'rating_$counter' > $q[4]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' name = 'rating' > $q[5]";
+						echo "<input type = 'radio' value='Strongly Agree' name = 'rating_$counter' > $q[5]";
 						echo "</TD>";
-						
 						echo "</TR>";
-					echo "</form>";
-				}
+						
+						echo "<input type='hidden' value='$q[6]' name='questionID_$counter'>";
+						
+						$counter++;
+					}										
+					
 				
 			} catch (PDOException $e) {
 			  print "Error!".$e->getMessage()."<br/>";
@@ -164,18 +169,22 @@ $c_id = $_SESSION['C_id'];
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-				foreach ($dbh->query("select question from Questions
-					join Survey on survey_id=id where id = '$c_id' and option_A is null;") as $q){
-					echo "<form>";
-						echo "<TR>";
-						echo "<TD>".$q[0]."</TD>";
-						echo "<TD>";
-						echo "<input type='text' name='response' height='auto' maxlength='249'>";
-						echo "</TD>";
-						echo "</TR>";
-					echo "</form>";
+				foreach ($dbh->query("select question, question_ID from Questions
+				join Survey on survey_id=id where id = '$c_id' and option_A is null;") as $q){
+					echo "<TR>";
+					echo "<TD>".$q[0]."</TD>";
+					echo "<TD>";
+					echo "<input type='text' name='rating_$counter' height='auto' maxlength='249'>";
+					echo "</TD>";
+					echo "</TR>";		
+					echo "<input type='hidden' value='$q[1]' name='questionID_$counter'>";
+					$counter++;
 				}
+					echo '<TD> <input type="submit" name="submitAnswers" value="Submit"> </TD>';
+					echo "</form>";
 				
+				
+			
 			} catch (PDOException $e) {
 			  print "Error!".$e->getMessage()."<br/>";
 			  die();
@@ -187,6 +196,20 @@ $c_id = $_SESSION['C_id'];
             
           </tbody>
         </table>
+		<?php
+		if(isset($_POST['submitAnswers'])){
+			try{
+				for($x = 0; $x < $counter; $x++){
+					$answer = $_POST["rating_$x"];
+					$id = $_POST["questionID_$x"];
+					$dbh->exec("INSERT INTO Answers VALUES('$email', '$id', '$answer')");
+				}
+				echo "Thanks for Completing the Survey!";
+			}catch(PDOException $ex){
+				echo "Already Have Taken This Survey!";
+			}
+		}
+		?>
       </div>
 	  
 	  

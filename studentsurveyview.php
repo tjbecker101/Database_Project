@@ -121,6 +121,7 @@ $email = $_SESSION['user_email'];
 					echo "</form>";
 				}
 				
+				
 			} catch (PDOException $e) {
 			  print "Error!".$e->getMessage()."<br/>";
 			  die();
