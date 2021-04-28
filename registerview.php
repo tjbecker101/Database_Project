@@ -50,7 +50,7 @@ $email = $_SESSION['user_email'];
         <li><a href="studentview.php" class="nav-link px-2 text-white">Home</a></li>
       </ul>
 
-      <a href="landingpage.php" class="text-end">
+      <a href="logout.php" class="text-end">
         <button type="button" class="btn btn-outline-light me-2">Logout</button>
       </a>
 	  
