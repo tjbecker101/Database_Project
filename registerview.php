@@ -41,29 +41,51 @@ $email = $_SESSION['user_email'];
     <link href="dashboard.css" rel="stylesheet">
   </head>
   <body>
-<div class="container py-4">
-<header class="p-3 bg-dark text-white">
-  <div class="container">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="studentview.php" class="nav-link px-2 text-white">Home</a></li>
-      </ul>
-
-      <a href="logout.php" class="text-end">
-        <button type="button" class="btn btn-outline-light me-2">Logout</button>
-      </a>
-	  
-    </div>
-  </div>
+    
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Register</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="logout.php">Logout</a>
+    </li>
+  </ul>
 </header>
+
+
 <div class="container-fluid">
   <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="studentview.php">
+              <span data-feather="home"></span>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#.php">
+              <span data-feather="circle"></span>
+              View Surveys
+            </a>
+          </li>
+		  <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="changepassword.php">
+              <span data-feather="key"></span>
+              Change Password
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+    </nav>
 
- 
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-
-      <h2>Section title</h2>
+      <h2>Courses</h2>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -71,10 +93,9 @@ $email = $_SESSION['user_email'];
             <tr>
               <th>Course ID</th>
               <th>Name</th>
-              <th>Credits</th>
-              <th></th>
-              
+              <th>Credits</th>              
             </tr>
+          </thead>
           </thead>
           <tbody>
 			<?php
@@ -117,7 +138,6 @@ $email = $_SESSION['user_email'];
           </tbody>
         </table>
       </div>
-	    </div>
 
     </main>
   </div>
