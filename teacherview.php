@@ -57,15 +57,19 @@
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Show Courses</h1>
         <p class="col-md-8 fs-4">See the students in your courses</p>
-        <button class="btn btn-primary btn-lg" type="button">View</button>
-      </div>
+		<form action="teachercourseview.php">
+			<button class="btn btn-primary btn-lg" type="submit">View</button>
+		</form>
+	  </div>
     </div>
 
     <div class="row align-items-md-stretch">
       <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
           <h2>View Surveys</h2>
-          <button class="btn btn-outline-light" type="button">View</button>
+          <form action="teachersurveyview.php">
+			<button class="btn btn-primary btn-lg" type="submit">View</button>
+		</form>
         </div>
       </div>
       <div class="col-md-6">

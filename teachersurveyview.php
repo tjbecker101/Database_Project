@@ -1,6 +1,9 @@
 
 
 
+
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -71,6 +74,8 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
+	  <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+
       <h2>Courses</h2>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
@@ -79,7 +84,8 @@
             <tr>
               <th>Course ID</th>
               <th>Name</th>
-              <th>Credits</th>              
+              <th>Credits</th>    
+			  <th></th>
             </tr>
           </thead>
           <tbody>
@@ -94,29 +100,16 @@
 				foreach ($dbh->query("SELECT id, name, credits 
 										FROM Course NATURAL JOIN Teaches
 										") as $c){
-					echo "<THEAD>";
-					echo "<TR>";
-					echo "<TD>".$c[0]."</TD>";
-					echo "<TD>".$c[1]."</TD>";
-					echo "<TD>".$c[2]."</TD>";
-					echo "<TR>";
-					echo "</THEAD>";
-					
-					echo "<TR>";
-					echo "<TD></TD>";
-					echo "<TD><b>Student Emails</TD>";
-					echo "<TD><b>Student Names</TD>";
-					echo "<TR>";
-					
-					foreach ($dbh->query("select * from (Takes natural join Course) 
-											join Student on Takes.email=Student.email
-											where id='".$c[0]."'") as $s){
+					echo "<form>";
 						echo "<TR>";
-						echo "<TD></TD>";
-						echo "<TD>".$s[5]."</TD>";
-						echo "<TD>".$s[7]."</TD>";
+						echo "<TD>".$c[0]."</TD>";
+						echo "<TD>".$c[1]."</TD>";
+						echo "<TD>".$c[2]."</TD>";
+						echo '<TD> <input type="submit" name="resultView" value="View Results"> </TD>';
+						//echo '<input type="hidden" name="name" value="'.$row[0].'">';
+						//echo '<input type="hidden" name="emp_no" value="'.$row[1].'">';
 						echo "<TR>";
-					}
+					echo "</form>";
 				}
 				
 			} catch (PDOException $e) {
@@ -129,6 +122,9 @@
           </tbody>
         </table>
       </div>
+	  
+	  
+	  
     </main>
   </div>
 </div>
@@ -139,5 +135,7 @@
       <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script>
   </body>
 </html>
+
+       
 
        
