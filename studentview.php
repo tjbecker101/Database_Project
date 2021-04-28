@@ -2,6 +2,23 @@
 session_start();
 $email = $_SESSION['user_email'];
 
+try {
+	$config = parse_ini_file("databaseSettings.ini");
+	$dbh = new PDO($config['dsn'], $config['username'], $config['password']);
+	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	foreach ($dbh->query("SELECT password FROM Student where email = '$email'") as $row){
+		if($row[0] == sha1("dummyPassword")){
+			header("Location: changepassword.php");
+		}
+	}
+				
+} catch (PDOException $e) {
+  print "Error!".$e->getMessage()."<br/>";
+  die();
+}
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -76,7 +93,7 @@ $email = $_SESSION['user_email'];
       <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
           <h2>Change Password</h2>
-          <button class="btn btn-outline-secondary" type="button">Change Password</button>
+          <button class="btn btn-outline-secondary" onclick="location.href = 'changepassword.php';" type="button">Change Password</button>
         </div>
       </div>
     </div>
