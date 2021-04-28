@@ -62,7 +62,7 @@ $email = $_SESSION['user_email'];
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Register for Courses</h1>
         <p class="col-md-8 fs-4">Register for the courses you wish to take in the upcoming semester</p>
-        <button class="btn btn-primary btn-lg" type="button">Register</button>
+        <button class="btn btn-primary btn-lg" onclick="location.href = 'registerview.php';" type="button">Register</button>
       </div>
     </div>
 
