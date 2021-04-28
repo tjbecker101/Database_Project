@@ -6,14 +6,24 @@ try{
 	
 	session_start();
 	$email = $_SESSION['user_email'];
+	$type = $_SESSION['account_type'];
 	$default = false;
-	foreach ($dbh->query("SELECT password FROM Student where email = '$email'") as $row){
-		if($row[0] == sha1("dummyPassword")){
-			$default = true;
+	if($type == "Student"){
+		foreach ($dbh->query("SELECT password FROM Student where email = '$email'") as $row){
+			if($row[0] == sha1("dummyPassword")){
+				$default = true;
+			}
 		}
+	}else if($type == "Instructor"){
+		foreach ($dbh->query("SELECT password FROM Instructor where email = '$email'") as $row){
+			if($row[0] == sha1("dummyPassword")){
+				$default = true;
+			}
+		}
+	}else{
+		header("Location: landingpage.php");
 	}
-	
-	
+
 }catch(PDOException $e){
 	print "Error! " .$e -> getMessage()."<br/>";
 	die();
@@ -62,13 +72,13 @@ try{
   
   <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Surveys</a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Change Password</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="landingpage.php">Logout</a>
+      <a class="nav-link" href="logout.php">Logout</a>
     </li>
   </ul>
 </header>
@@ -79,24 +89,53 @@ try{
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="teacherview.php">
-              <span data-feather="home"></span>
-              Dashboard
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="teachercourseview.php">
-              <span data-feather="circle"></span>
-              View Courses
-            </a>
-          </li>
-		  <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-              <span data-feather="key"></span>
-              Change Password
-            </a>
-          </li>
+          <?php
+		  if($type == "Instructor"){
+			echo "<li class='nav-item'>";
+            echo "<a class='nav-link active' aria-current='page' href='teacherview.php'>";
+			echo "<span data-feather='home'></span>";
+			echo "Dashboard";
+            echo "</a>";
+			echo "</li>";
+          
+			echo "<li class='nav-item'>";
+            echo "<a class='nav-link active' aria-current='page' href='teachercourseview.php'>";
+            echo "<span data-feather='circle'></span>";
+            echo "View Courses";
+            echo "</a>";
+			echo "</li>";
+			
+			echo "<li class='nav-item'>";
+            echo "<a class='nav-link active' aria-current='page' href='changepassword.php'>";
+            echo "<span data-feather='key'></span>";
+            echo "Change Password";
+            echo "</a>";
+			echo "</li>";
+			
+		  }else{
+			  
+			echo "<li class='nav-item'>";
+            echo "<a class='nav-link active' aria-current='page' href='studentview.php'>";
+			echo "<span data-feather='home'></span>";
+			echo "Dashboard";
+            echo "</a>";
+			echo "</li>";
+          
+			echo "<li class='nav-item'>";
+            echo "<a class='nav-link active' aria-current='page' href='#.php'>";
+            echo "<span data-feather='circle'></span>";
+            echo "Take Survey";
+            echo "</a>";
+			echo "</li>";
+			
+			echo "<li class='nav-item'>";
+            echo "<a class='nav-link active' aria-current='page' href='changepassword.php'>";
+            echo "<span data-feather='key'></span>";
+            echo "Change Password";
+            echo "</a>";
+			echo "</li>"; 
+		  }
+		  ?>
         </ul>
       </div>
     </nav>
@@ -134,7 +173,11 @@ try{
 				if($pass1 != $pass2){
 					echo "Passwords do not Match";
 				}else{
-					$dbh->exec("UPDATE Student SET password = sha1('$pass1') WHERE email = '$email'");
+					if($type == "Instructor"){
+						$dbh->exec("UPDATE Instructor SET password = sha1('$pass1') WHERE email = '$email'");
+					}else{
+						$dbh->exec("UPDATE Student SET password = sha1('$pass1') WHERE email = '$email'");
+					}
 					echo "Password Changed!";
 				}
 			}catch(PDOException $ex){
