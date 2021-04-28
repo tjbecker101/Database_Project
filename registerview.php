@@ -67,7 +67,7 @@ $email = $_SESSION['user_email'];
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#.php">
+            <a class="nav-link active" aria-current="page" href="studentsurveyview.php">
               <span data-feather="circle"></span>
               View Surveys
             </a>

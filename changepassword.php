@@ -106,9 +106,9 @@ try{
 			echo "</li>";
 			
 			echo "<li class='nav-item'>";
-            echo "<a class='nav-link active' aria-current='page' href='changepassword.php'>";
-            echo "<span data-feather='key'></span>";
-            echo "Change Password";
+            echo "<a class='nav-link active' aria-current='page' href='teachersurveyview.php'>";
+            echo "<span data-feather='circle'></span>";
+            echo "View Surveys";
             echo "</a>";
 			echo "</li>";
 			
@@ -122,16 +122,16 @@ try{
 			echo "</li>";
           
 			echo "<li class='nav-item'>";
-            echo "<a class='nav-link active' aria-current='page' href='#.php'>";
+            echo "<a class='nav-link active' aria-current='page' href='studentsurveyview.php'>";
             echo "<span data-feather='circle'></span>";
-            echo "Take Survey";
+            echo "View Surveys";
             echo "</a>";
 			echo "</li>";
 			
 			echo "<li class='nav-item'>";
-            echo "<a class='nav-link active' aria-current='page' href='changepassword.php'>";
-            echo "<span data-feather='key'></span>";
-            echo "Change Password";
+            echo "<a class='nav-link active' aria-current='page' href='registerview.php'>";
+            echo "<span data-feather='circle'></span>";
+            echo "Register";
             echo "</a>";
 			echo "</li>"; 
 		  }
