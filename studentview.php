@@ -87,7 +87,7 @@ try {
       <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
           <h2>View Surveys</h2>
-          <button class="btn btn-outline-light" type="button">View</button>
+          <button class="btn btn-outline-light" onclick="location.href = 'studentsurveyview.php';" type="button">View</button>
         </div>
       </div>
       <div class="col-md-6">
