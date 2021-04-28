@@ -1,6 +1,7 @@
 <?php
 session_start();
 $email = $_SESSION['user_email'];
+$c_id = $_SESSION['course_id'];
 
 ?>
 
@@ -61,24 +62,14 @@ $email = $_SESSION['user_email'];
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
+          
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="teacherview.php">
-              <span data-feather="home"></span>
-              Dashboard
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="teachercourseview.php">
+            <a class="nav-link active" aria-current="page" href="teachersurveyview.php">
               <span data-feather="circle"></span>
-              View Courses
+              View Surveys
             </a>
           </li>
-		  <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-              <span data-feather="key"></span>
-              Change Password
-            </a>
-          </li>
+		  
         </ul>
       </div>
     </nav>
@@ -87,7 +78,7 @@ $email = $_SESSION['user_email'];
 
 	  <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-      <h2>Courses</h2>
+      <h2>Questions</h2>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -110,14 +101,15 @@ $email = $_SESSION['user_email'];
 
 				foreach ($dbh->query("SELECT id, name, credits, email 
 										FROM Course NATURAL JOIN Teaches
-										WHERE email='".$email."'") as $c){
-					echo "<form action='teacherquestionview.php'>";
+										WHERE id='".$c_id."'") as $c){
+					echo "<form>";
 						echo "<TR>";
 						echo "<TD>".$c[0]."</TD>";
 						echo "<TD>".$c[1]."</TD>";
 						echo "<TD>".$c[2]."</TD>";
-						$_SESSION['course_id'] = $c[0];
 						echo '<TD> <input type="submit" name="resultView" value="View Results"> </TD>';
+						//echo '<input type="hidden" name="name" value="'.$row[0].'">';
+						//echo '<input type="hidden" name="emp_no" value="'.$row[1].'">';
 						echo "</TR>";
 					echo "</form>";
 				}

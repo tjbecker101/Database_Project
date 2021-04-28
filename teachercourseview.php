@@ -1,4 +1,8 @@
+<?php
+session_start();
+$email = $_SESSION['user_email'];
 
+?>
 
 
 <!doctype html>
@@ -9,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.82.0">
-    <title>Dashboard Template · Bootstrap v5.0</title>
+    <title>Teacher View</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
@@ -47,7 +51,7 @@
   </button>
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">Sign out</a>
+      <a class="nav-link" href="landingpage.php">Logout</a>
     </li>
   </ul>
 </header>
@@ -62,6 +66,18 @@
             <a class="nav-link active" aria-current="page" href="teacherview.php">
               <span data-feather="home"></span>
               Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="teachersurveyview.php">
+              <span data-feather="circle"></span>
+              View Surveys
+            </a>
+          </li>
+		  <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">
+              <span data-feather="key"></span>
+              Change Password
             </a>
           </li>
           
@@ -91,22 +107,22 @@
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-				foreach ($dbh->query("SELECT id, name, credits 
+				foreach ($dbh->query("SELECT id, name, credits, email 
 										FROM Course NATURAL JOIN Teaches
-										") as $c){
+										WHERE email='".$email."'") as $c){
 					echo "<THEAD>";
 					echo "<TR>";
 					echo "<TD>".$c[0]."</TD>";
 					echo "<TD>".$c[1]."</TD>";
 					echo "<TD>".$c[2]."</TD>";
-					echo "<TR>";
+					echo "</TR>";
 					echo "</THEAD>";
 					
 					echo "<TR>";
 					echo "<TD></TD>";
 					echo "<TD><b>Student Emails</TD>";
 					echo "<TD><b>Student Names</TD>";
-					echo "<TR>";
+					echo "</TR>";
 					
 					foreach ($dbh->query("select * from (Takes natural join Course) 
 											join Student on Takes.email=Student.email
@@ -115,7 +131,7 @@
 						echo "<TD></TD>";
 						echo "<TD>".$s[5]."</TD>";
 						echo "<TD>".$s[7]."</TD>";
-						echo "<TR>";
+						echo "</TR>";
 					}
 				}
 				
