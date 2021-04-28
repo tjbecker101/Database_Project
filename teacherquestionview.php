@@ -99,17 +99,12 @@ $c_id = $_SESSION['course_id'];
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-				foreach ($dbh->query("SELECT id, name, credits, email 
-										FROM Course NATURAL JOIN Teaches
-										WHERE id='".$c_id."'") as $c){
+				foreach ($dbh->query("select submissions 
+										from Questions join Answers on Questions.question_ID=Answers.question_ID 
+										where survey_ID='".$c_id."'") as $q){
 					echo "<form>";
 						echo "<TR>";
-						echo "<TD>".$c[0]."</TD>";
-						echo "<TD>".$c[1]."</TD>";
-						echo "<TD>".$c[2]."</TD>";
-						echo '<TD> <input type="submit" name="resultView" value="View Results"> </TD>';
-						//echo '<input type="hidden" name="name" value="'.$row[0].'">';
-						//echo '<input type="hidden" name="emp_no" value="'.$row[1].'">';
+						echo "<TD>".$q[0]."</TD>";
 						echo "</TR>";
 					echo "</form>";
 				}
