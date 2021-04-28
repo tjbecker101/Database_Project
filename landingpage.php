@@ -10,7 +10,8 @@ try{
 		foreach($dbh->query("SELECT email, password FROM Student") as $row){
 			if($row[0] == $_POST['emailInput']){
 				if($row[1] == sha1($_POST['passwordInput'])){
-					$_SESSION["loggedin"] = true;
+					$_SESSION['loggedin'] = true;
+					$_SESSION['user_email'] = $_POST["emailInput"];
 					$valid = true;
 					header("Location: studentview.php");
 					exit();
@@ -25,11 +26,11 @@ try{
 		foreach($dbh->query("SELECT email, password FROM Instructor") as $row){
 			if($row[0] == $_POST['emailInput']){
 				if($row[1] == sha1($_POST['passwordInput'])){
-					$_SESSION["loggedin"] = true;
+					$_SESSION['loggedin'] = true;
+					$_SESSION['user_email'] = $_POST["emailInput"];
 					$valid = TRUE;
 					header("Location: teacherview.php");
 					exit();
-					echo "works";
 				}else{
 					$valid = false;
 				}

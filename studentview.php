@@ -1,3 +1,8 @@
+<?php
+session_start();
+$email = $_SESSION['user_email'];
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -70,7 +75,7 @@
       </div>
       <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-          <h2>Change Your Password</h2>
+          <h2>Change Password</h2>
           <button class="btn btn-outline-secondary" type="button">Change Password</button>
         </div>
       </div>
