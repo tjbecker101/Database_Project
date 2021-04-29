@@ -93,6 +93,22 @@
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+				foreach ($dbh->query("select count(email)
+									from (select distinct email 
+									from (Questions natural join Answers)
+									where survey_ID='".$c_id."')T1 ") as $totResponses){}
+				foreach ($dbh->query("select count(email)
+									from Takes 
+									where ID='".$c_id."'") as $totStudent){}
+
+				$resRate=($totResponses[0]/$totStudent[0])*100;
+
+				echo "<TR>";
+				echo "<TD>Response Rate: $totResponses[0]/$totStudent[0] ($resRate%)</TD>";
+				echo "<TD></TD>";
+				echo "<TD></TD>";
+				echo "</TR>";
+
 				foreach ($dbh->query("select question, question_ID, option_A, option_B, option_C, option_D, option_E
 										from Questions 
 										where survey_ID='".$c_id."'") as $q){
@@ -121,19 +137,11 @@
 							foreach ($dbh->query("select count(email)
 													from (Questions natural join Answers) 
 													where survey_ID='".$c_id."' and question_ID='".$q[1]."'") as $responses){}
-							foreach ($dbh->query("select count(email)
-													from Takes 
-													where ID='".$c_id."'") as $totStudent){}
+							
 							if ($responses[0] == 0){
 								continue;
 							}
-							$resRate=($responses[0]/$totStudent[0])*100;
-									
-							echo "<TR>";
-							echo "<TD>Response Rate: $responses[0]/$totStudent[0] ($resRate%)</TD>";
-							echo "<TD></TD>";
-							echo "<TD></TD>";
-							echo "</TR>";
+								
 							
 							if ($q[2]!=null){
 							
