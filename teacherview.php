@@ -1,3 +1,13 @@
+<?php
+	$type = $_SESSION['account_type'];
+
+	if($type == "Student"){
+		header("Location: studentview.php");
+	}else if(!$type == "Instructor"){
+		header("Location: landingpage.php");
+	}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>

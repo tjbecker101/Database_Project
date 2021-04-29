@@ -1,7 +1,7 @@
 <?php
-session_start();
-$email = $_SESSION['user_email'];
-
+	session_start();
+	$email = $_SESSION['user_email'];
+	
 ?>
 
 

@@ -1,7 +1,7 @@
 <?php
-session_start();
-$email = $_SESSION['user_email'];
-
+	session_start();
+	$email = $_SESSION['user_email'];
+	
 ?>
 
 <!doctype html>
@@ -110,12 +110,13 @@ $email = $_SESSION['user_email'];
 				foreach ($dbh->query("SELECT id, name, credits, email 
 										FROM Course NATURAL JOIN Teaches
 										WHERE email='".$email."'") as $c){
-					echo "<form action='teacherquestionview.php'>";
+					echo "<form method='post'>";
 						echo "<TR>";
 						echo "<TD>".$c[0]."</TD>";
 						echo "<TD>".$c[1]."</TD>";
 						echo "<TD>".$c[2]."</TD>";
 						$_SESSION['course_id'] = $c[0];
+						echo '<input type="hidden" name="c_id" value="'.$c[0].'">';
 						echo '<TD> <input type="submit" name="resultView" value="View Results"> </TD>';
 						echo "</TR>";
 					echo "</form>";
@@ -124,6 +125,12 @@ $email = $_SESSION['user_email'];
 			} catch (PDOException $e) {
 			  print "Error!".$e->getMessage()."<br/>";
 			  die();
+			}
+			
+			if(isset($_POST['resultView'])){
+				$_SESSION['course_id']= $_POST['c_id'];
+				header("Location: teacherquestionview.php");
+
 			}
 
 			?>

@@ -1,8 +1,8 @@
 <?php
-session_start();
-$email = $_SESSION['user_email'];
-$c_id = $_SESSION['course_id'];
-
+	session_start();
+	$email = $_SESSION['user_email'];
+	$c_id = $_SESSION['course_id'];
+	
 ?>
 
 <!doctype html>
@@ -66,7 +66,7 @@ $c_id = $_SESSION['course_id'];
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="teachersurveyview.php">
               <span data-feather="circle"></span>
-              View Surveys
+              Back To Surveys
             </a>
           </li>
 		  
@@ -76,21 +76,9 @@ $c_id = $_SESSION['course_id'];
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-	  <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
       <h2>Questions</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-			
-            <tr>
-              <th>Course ID</th>
-              <th>Name</th>
-              <th>Credits</th>    
-			  <th></th>
-            </tr>
-          </thead>
-          <tbody>
+      
 			<?php
 
 			try {
@@ -99,14 +87,133 @@ $c_id = $_SESSION['course_id'];
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-				foreach ($dbh->query("select submissions 
-										from Questions join Answers on Questions.question_ID=Answers.question_ID 
+				foreach ($dbh->query("select question, question_ID, option_A, option_B, option_C, option_D, option_E
+										from Questions 
 										where survey_ID='".$c_id."'") as $q){
-					echo "<form>";
-						echo "<TR>";
-						echo "<TD>".$q[0]."</TD>";
-						echo "</TR>";
-					echo "</form>";
+					
+					echo '<div class="table-responsive">';
+						echo '<table style="width=100%" class="table table-striped table-sm">';
+						
+							echo '<colgroup>';
+							   echo '<col span="1" style="width: 70%;">';
+							   echo '<col span="1" style="width: 15%;">';
+							   echo '<col span="1" style="width: 15%;">';
+							echo '</colgroup>';
+						
+							echo '<tbody>';
+							
+							//question
+							echo "<THEAD>";
+							echo "<TR>";
+							echo "<TD><b>".$q[0]."</TD>";
+							echo "<TD></TD>";
+							echo "<TD></TD>";
+							echo "</TR>";
+							echo "</THEAD>";
+							
+							//response rate
+							foreach ($dbh->query("select count(email)
+													from (Questions natural join Answers) 
+													where survey_ID='".$c_id."' and question_ID='".$q[1]."'") as $responses){}
+							foreach ($dbh->query("select count(email)
+													from Takes 
+													where ID='".$c_id."'") as $totStudent){}
+							$resRate=($responses[0]/$totStudent[0])*100;
+									
+							echo "<TR>";
+							echo "<TD>Response Rate: $responses[0]/$totStudent[0] ($resRate%)</TD>";
+							echo "<TD></TD>";
+							echo "<TD></TD>";
+							echo "</TR>";
+							
+							if ($q[2]!=null){
+							
+								//multiple choice header 
+								echo "<TR>";
+								echo "<TD><b>Response Option</TD>";
+								echo "<TD><b>Frequency</TD>";
+								echo "<TD><b>Percent</TD>";
+								echo "</TR>";
+								
+								//count up multiple choice responses
+								foreach ($dbh->query("select count(email)
+													from Questions natural join Answers 
+													where survey_ID='".$c_id."' 
+													and question_ID='".$q[1]."' 
+													and submissions='A'") as $resA){}
+								foreach ($dbh->query("select count(email)
+													from Questions natural join Answers 
+													where survey_ID='".$c_id."' 
+													and question_ID='".$q[1]."' 
+													and submissions='B'") as $resB){}
+								foreach ($dbh->query("select count(email)
+													from Questions natural join Answers 
+													where survey_ID='".$c_id."' 
+													and question_ID='".$q[1]."' 
+													and submissions='C'") as $resC){}
+								foreach ($dbh->query("select count(email)
+													from Questions natural join Answers 
+													where survey_ID='".$c_id."' 
+													and question_ID='".$q[1]."' 
+													and submissions='D'") as $resD){}
+								foreach ($dbh->query("select count(email)
+													from Questions natural join Answers 
+													where survey_ID='".$c_id."' 
+													and question_ID='".$q[1]."' 
+													and submissions='E'") as $resE){}
+								$ratioA=($resA[0]/$responses[0])*100;
+								$ratioB=($resB[0]/$responses[0])*100;
+								$ratioC=($resC[0]/$responses[0])*100;
+								$ratioD=($resD[0]/$responses[0])*100;
+								$ratioE=($resE[0]/$responses[0])*100;
+
+								//show multiple choice responses
+								echo "<TR>";
+								echo "<TD>".$q[2]."</TD>";
+								echo "<TD>".$resA[0]."</TD>";
+								echo "<TD>".$ratioA."%</TD>";
+								echo "</TR>";
+								echo "<TR>";
+								echo "<TD>".$q[3]."</TD>";
+								echo "<TD>".$resB[0]."</TD>";
+								echo "<TD>".$ratioB."%</TD>";
+								echo "</TR>";
+								echo "<TR>";
+								echo "<TD>".$q[4]."</TD>";
+								echo "<TD>".$resC[0]."</TD>";
+								echo "<TD>".$ratioC."%</TD>";
+								echo "</TR>";
+								echo "<TR>";
+								echo "<TD>".$q[5]."</TD>";
+								echo "<TD>".$resD[0]."</TD>";
+								echo "<TD>".$ratioD."%</TD>";
+								echo "</TR>";
+								echo "<TR>";
+								echo "<TD>".$q[6]."</TD>";
+								echo "<TD>".$resE[0]."</TD>";
+								echo "<TD>".$ratioE."%</TD>";
+								echo "</TR>";
+							
+							} else {
+								
+								foreach ($dbh->query("select submissions
+													from Questions natural join Answers 
+													where survey_ID='".$c_id."' 
+													and question_ID='".$q[1]."'") as $shrtAns){
+									echo "<TR>";
+									echo "<TD>".$shrtAns[0]."</TD>";
+									echo "<TD></TD>";
+									echo "<TD></TD>";
+									echo "</TR>";
+								}
+								
+								
+							}
+							
+							echo '</tbody>';
+						echo '</table>';
+					echo '</div>';
+					
 				}
 				
 			} catch (PDOException $e) {
@@ -116,9 +223,7 @@ $c_id = $_SESSION['course_id'];
 
 			?>
             
-          </tbody>
-        </table>
-      </div>
+          
 	  
 	  
 	  
