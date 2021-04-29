@@ -2,7 +2,13 @@
 session_start();
 $email = $_SESSION['user_email'];
 $c_id = $_SESSION['C_id'];
+$type = $_SESSION['account_type'];
 
+if($type == "Instructor"){
+	header("Location: teacherview.php");
+}else if(!$type == "Student"){
+	header("Location: landingpage.php");
+}
 ?>
 
 <!doctype html>

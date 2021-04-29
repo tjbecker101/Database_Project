@@ -1,6 +1,13 @@
 <?php
 session_start();
 $email = $_SESSION['user_email'];
+$type = $_SESSION['account_type'];
+
+if($type == "Instructor"){
+	header("Location: teacherview.php");
+}else if(!$type == "Student"){
+	header("Location: landingpage.php");
+}
 
 try {
 	$config = parse_ini_file("databaseSettings.ini");

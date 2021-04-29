@@ -1,7 +1,13 @@
 <?php
 session_start();
 $email = $_SESSION['user_email'];
+$type = $_SESSION['account_type'];
 
+if($type == "Instructor"){
+	header("Location: teacherview.php");
+}else if(!$type == "Student"){
+	header("Location: landingpage.php");
+}
 ?>
 
 <!doctype html>
@@ -12,7 +18,7 @@ $email = $_SESSION['user_email'];
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.82.0">
-    <title>Teacher View</title>
+    <title>Surveys</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
@@ -94,7 +100,8 @@ $email = $_SESSION['user_email'];
             <tr>
               <th>Course ID</th>
               <th>Name</th>
-              <th>Credits</th>    
+              <th>Credits</th>  
+				<th>Completed?</th>
 			  <th></th>
             </tr>
           </thead>
@@ -107,14 +114,25 @@ $email = $_SESSION['user_email'];
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-				foreach ($dbh->query("SELECT id, name, credits, email 
-										FROM Course NATURAL JOIN Takes
-										WHERE email='".$email."'") as $c){
+				foreach ($dbh->query("SELECT id, name, credits, email FROM Course NATURAL JOIN Takes
+				WHERE email='".$email."'") as $c){
 					echo '<form method="post">';
 						echo "<TR>";
 						echo "<TD>".$c[0]."</TD>";
 						echo "<TD>".$c[1]."</TD>";
 						echo "<TD>".$c[2]."</TD>";
+						$taken = false;
+						foreach ($dbh->query("select Answers.email, Answers.question_ID from Answers, Questions 
+						where Answers.question_ID=Questions.question_ID and email = '$email';") as $q){
+							if($email == $q[0]){
+								echo "<TD> Yes </TD>";
+								$taken = true;
+								break;
+							}
+						}
+						if(!$taken){
+							echo "<TD> No </TD>";
+						}
 						echo "<input type='hidden' name='c_ID' value='$c[0]'>";
 						echo '<TD> <input type="submit" name="questionslink" value="Take Survey"> </TD>';
 						echo "</TR>";
