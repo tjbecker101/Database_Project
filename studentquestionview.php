@@ -218,12 +218,12 @@ if($type == "Instructor"){
 					for($x = 0; $x < $counter; $x++){
 						$answer = $_POST["rating_$x"];
 						$id = $_POST["questionID_$x"];
-						$dbh->exec("INSERT INTO Answers VALUES('$email', '$id', '$answer')");
+						$dbh->exec("INSERT INTO Answers VALUES('$email', '$id', '$answer', now())");
 					}
 					for($x = 0; $x < $counter2; $x++){
 						$answer2 = $_POST["rating2_$x"];
 						$id2 = $_POST["questionID2_$x"];
-						$stmt = $dbh -> prepare("INSERT INTO Answers VALUES('$email', '$id2', :answer2)");
+						$stmt = $dbh -> prepare("INSERT INTO Answers VALUES('$email', '$id2', :answer2, now())");
 						$stmt -> bindParam(':answer2',$answer2);
 						$stmt -> execute();
 					}
