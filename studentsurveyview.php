@@ -102,6 +102,7 @@ if($type == "Instructor"){
               <th>Name</th>
               <th>Credits</th>  
 				<th>Completed?</th>
+				<th>Time Completed</th>
 			  <th></th>
             </tr>
           </thead>
@@ -122,16 +123,18 @@ if($type == "Instructor"){
 						echo "<TD>".$c[1]."</TD>";
 						echo "<TD>".$c[2]."</TD>";
 						$taken = false;
-						foreach ($dbh->query("select Answers.email, Answers.question_ID, survey_ID from Answers, Questions 
+						foreach ($dbh->query("select Answers.email, Answers.question_ID, survey_ID, time_completed from Answers, Questions 
 						where Answers.question_ID=Questions.question_ID and email = '$email' and survey_ID = '$c[0]';") as $q){
 							if($email == $q[0]){
 								echo "<TD> Yes </TD>";
+								echo "<TD> $q[3] </TD>";
 								$taken = true;
 								break;
 							}
 						}
 						if(!$taken){
 							echo "<TD> No </TD>";
+							echo "<TD> </TD>";
 						}
 						echo "<input type='hidden' name='c_ID' value='$c[0]'>";
 						echo '<TD> <input type="submit" name="questionslink" value="Take Survey"> </TD>';
