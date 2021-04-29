@@ -174,9 +174,15 @@ try{
 					echo "Passwords do not Match";
 				}else{
 					if($type == "Instructor"){
-						$dbh->exec("UPDATE Instructor SET password = sha1('$pass1') WHERE email = '$email'");
+						$stmt = $dbh -> prepare("UPDATE Instructor SET password = sha1(:pass) WHERE email = :email");
+						$stmt -> bindParam(':pass',$pass1);
+						$stmt -> bindParam(':email',$email);
+						$stmt -> execute();
 					}else{
-						$dbh->exec("UPDATE Student SET password = sha1('$pass1') WHERE email = '$email'");
+						$stmt = $dbh -> prepare("UPDATE Student SET password = sha1(:pass) WHERE email = :email");
+						$stmt -> bindParam(':pass',$pass1);
+						$stmt -> bindParam(':email',$email);
+						$stmt -> execute();
 					}
 					echo "Password Changed!";
 				}
