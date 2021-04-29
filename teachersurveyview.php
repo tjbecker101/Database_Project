@@ -1,7 +1,13 @@
 <?php
 	session_start();
 	$email = $_SESSION['user_email'];
-	
+	$type = $_SESSION['account_type'];
+
+	if($type == "Student"){
+		header("Location: studentview.php");
+	}else if(!$type == "Instructor"){
+		header("Location: landingpage.php");
+	}
 ?>
 
 <!doctype html>
@@ -74,7 +80,7 @@
             </a>
           </li>
 		  <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
+            <a class="nav-link active" aria-current="page" href="changepassword.php">
               <span data-feather="key"></span>
               Change Password
             </a>

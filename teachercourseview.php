@@ -1,7 +1,13 @@
 <?php
 	session_start();
 	$email = $_SESSION['user_email'];
-	
+	$type = $_SESSION['account_type'];
+
+	if($type == "Student"){
+		header("Location: studentview.php");
+	}else if(!$type == "Instructor"){
+		header("Location: landingpage.php");
+	}
 ?>
 
 
@@ -75,7 +81,7 @@
             </a>
           </li>
 		  <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
+            <a class="nav-link active" aria-current="page" href="changepassword.php">
               <span data-feather="key"></span>
               Change Password
             </a>
@@ -88,17 +94,7 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
       <h2>Courses</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-			
-            <tr>
-              <th>Course ID</th>
-              <th>Name</th>
-              <th>Credits</th>              
-            </tr>
-          </thead>
-          <tbody>
+      
 			<?php
 
 			try {
@@ -110,6 +106,26 @@
 				foreach ($dbh->query("SELECT id, name, credits, email 
 										FROM Course NATURAL JOIN Teaches
 										WHERE email='".$email."'") as $c){
+											
+					echo '<div class="table-responsive">';
+					echo '<table style="width=100%" class="table table-striped table-sm">';
+					  echo '<thead>';
+						
+						echo '<tr>';
+						  echo '<th>Course ID</th>';
+						  echo '<th>Name</th>';
+						  echo '<th>Credits</th>';              
+						echo '</tr>';
+					  echo '</thead>';
+					  
+					  echo '<colgroup>';
+					   echo '<col span="1" style="width: 33%;">';
+					   echo '<col span="1" style="width: 33%;">';
+					   echo '<col span="1" style="width: 34%;">';
+					echo '</colgroup>';
+					  
+					  echo '<tbody>';
+											
 					echo "<THEAD>";
 					echo "<TR>";
 					echo "<TD>".$c[0]."</TD>";
@@ -133,6 +149,10 @@
 						echo "<TD>".$s[7]."</TD>";
 						echo "</TR>";
 					}
+					
+					echo '</tbody>';
+				echo '</table>';
+			  echo '</div>';
 				}
 				
 			} catch (PDOException $e) {
@@ -142,9 +162,7 @@
 
 			?>
             
-          </tbody>
-        </table>
-      </div>
+          
     </main>
   </div>
 </div>

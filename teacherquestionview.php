@@ -2,7 +2,13 @@
 	session_start();
 	$email = $_SESSION['user_email'];
 	$c_id = $_SESSION['course_id'];
-	
+	$type = $_SESSION['account_type'];
+
+	if($type == "Student"){
+		header("Location: studentview.php");
+	}else if(!$type == "Instructor"){
+		header("Location: landingpage.php");
+	}
 ?>
 
 <!doctype html>
@@ -118,6 +124,9 @@
 							foreach ($dbh->query("select count(email)
 													from Takes 
 													where ID='".$c_id."'") as $totStudent){}
+							if ($responses[0] == 0){
+								continue;
+							}
 							$resRate=($responses[0]/$totStudent[0])*100;
 									
 							echo "<TR>";

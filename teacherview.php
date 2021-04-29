@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	$type = $_SESSION['account_type'];
 
 	if($type == "Student"){
@@ -67,9 +68,7 @@
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Show Courses</h1>
         <p class="col-md-8 fs-4">See the students in your courses</p>
-		<form action="teachercourseview.php">
-			<button class="btn btn-primary btn-lg" type="submit">View</button>
-		</form>
+		<button class="btn btn-primary btn-lg" onclick="location.href = 'teachercourseview.php';" type="button">View</button>
 	  </div>
     </div>
 
@@ -77,15 +76,15 @@
       <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
           <h2>View Surveys</h2>
-          <form action="teachersurveyview.php">
-			<button class="btn btn-primary btn-lg" type="submit">View</button>
-		</form>
+          <button class="btn btn-outline-light" onclick="location.href = 'teachersurveyview.php';" type="button">View</button>
+
         </div>
       </div>
       <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
           <h2>Change Your Password</h2>
-          <button class="btn btn-outline-secondary" type="button">Change Password</button>
+          <button class="btn btn-outline-secondary" onclick="location.href = 'changepassword.php';" type="button">Change Password</button>
+
         </div>
       </div>
     </div>
