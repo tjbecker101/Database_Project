@@ -1,11 +1,28 @@
 <?php
 	session_start();
 	$type = $_SESSION['account_type'];
+	$email = $_SESSION['user_email'];
 
 	if($type == "Student"){
 		header("Location: studentview.php");
 	}else if(!$type == "Instructor"){
 		header("Location: landingpage.php");
+	}
+	
+	try {
+		$config = parse_ini_file("databaseSettings.ini");
+		$dbh = new PDO($config['dsn'], $config['username'], $config['password']);
+		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		foreach ($dbh->query("SELECT password FROM Instructor where email = '$email'") as $row){
+			if($row[0] == sha1("dummyPassword")){
+				header("Location: changepassword.php");
+			}
+		}
+				
+	} catch (PDOException $e) {
+	    print "Error!".$e->getMessage()."<br/>";
+	    die();
 	}
 ?>
 
