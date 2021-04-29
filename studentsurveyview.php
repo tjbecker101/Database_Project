@@ -122,8 +122,8 @@ if($type == "Instructor"){
 						echo "<TD>".$c[1]."</TD>";
 						echo "<TD>".$c[2]."</TD>";
 						$taken = false;
-						foreach ($dbh->query("select Answers.email, Answers.question_ID from Answers, Questions 
-						where Answers.question_ID=Questions.question_ID and email = '$email';") as $q){
+						foreach ($dbh->query("select Answers.email, Answers.question_ID, survey_ID from Answers, Questions 
+						where Answers.question_ID=Questions.question_ID and email = '$email' and survey_ID = '$c[0]';") as $q){
 							if($email == $q[0]){
 								echo "<TD> Yes </TD>";
 								$taken = true;

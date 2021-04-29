@@ -116,23 +116,23 @@ if($type == "Instructor"){
 						echo "<TD>".$q[0]."</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' value='Strongly Disagree' name = 'rating_$counter' > $q[1]";
+						echo "<input type = 'radio' value='A' name = 'rating_$counter' > $q[1]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' value='Disagree' name = 'rating_$counter' > $q[2]";
+						echo "<input type = 'radio' value='B' name = 'rating_$counter' > $q[2]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' value='Neutral' name = 'rating_$counter' > $q[3]";
+						echo "<input type = 'radio' value='C' name = 'rating_$counter' > $q[3]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' value='Agree' name = 'rating_$counter' > $q[4]";
+						echo "<input type = 'radio' value='D' name = 'rating_$counter' > $q[4]";
 						echo "</TD>";
 						
 						echo "<TD>";
-						echo "<input type = 'radio' value='Strongly Agree' name = 'rating_$counter' > $q[5]";
+						echo "<input type = 'radio' value='E' name = 'rating_$counter' > $q[5]";
 						echo "</TD>";
 						echo "</TR>";
 						
@@ -174,17 +174,19 @@ if($type == "Instructor"){
 				$dbh = new PDO($config['dsn'], $config['username'], $config['password']);
 
 				$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+				
+				$counter2 = 0;
+				
 				foreach ($dbh->query("select question, question_ID from Questions
 				join Survey on survey_id=id where id = '$c_id' and option_A is null;") as $q){
 					echo "<TR>";
 					echo "<TD>".$q[0]."</TD>";
 					echo "<TD>";
-					echo "<input type='text' name='rating_$counter' height='auto' maxlength='249'>";
+					echo "<input type='text' name='rating2_$counter2' height='auto' maxlength='249'>";
 					echo "</TD>";
 					echo "</TR>";		
-					echo "<input type='hidden' value='$q[1]' name='questionID_$counter'>";
-					$counter++;
+					echo "<input type='hidden' value='$q[1]' name='questionID2_$counter2'>";
+					$counter2++;
 				}
 					echo '<TD> <input type="submit" name="submitAnswers" value="Submit"> </TD>';
 					echo "</form>";
@@ -205,12 +207,28 @@ if($type == "Instructor"){
 		<?php
 		if(isset($_POST['submitAnswers'])){
 			try{
+				$validAnswers = true;
 				for($x = 0; $x < $counter; $x++){
-					$answer = $_POST["rating_$x"];
-					$id = $_POST["questionID_$x"];
-					$dbh->exec("INSERT INTO Answers VALUES('$email', '$id', '$answer')");
+					if(!isset($_POST["rating_$x"])){
+						$validAnswers = false;
+						break;
+					}
 				}
-				echo "Thanks for Completing the Survey!";
+				if($validAnswers){
+					for($x = 0; $x < $counter; $x++){
+						$answer = $_POST["rating_$x"];
+						$id = $_POST["questionID_$x"];
+						$dbh->exec("INSERT INTO Answers VALUES('$email', '$id', '$answer')");
+					}
+					for($x = 0; $x < $counter2; $x++){
+						$answer2 = $_POST["rating2_$x"];
+						$id2 = $_POST["questionID2_$x"];
+						$dbh->exec("INSERT INTO Answers VALUES('$email', '$id2', '$answer2')");
+					}
+					echo "Thanks for Completing the Survey!";
+				}else{
+					echo "Please Answer all Multiple Choice Questions";
+				}
 			}catch(PDOException $ex){
 				echo "Already Have Taken This Survey!";
 			}

@@ -12,6 +12,7 @@ try{
 				if($row[1] == sha1($_POST['passwordInput'])){
 					$_SESSION['loggedin'] = true;
 					$_SESSION['user_email'] = $_POST["emailInput"];
+					$_SESSION['account_type'] = "Student";
 					$valid = true;
 					header("Location: studentview.php");
 					exit();
@@ -28,6 +29,7 @@ try{
 				if($row[1] == sha1($_POST['passwordInput'])){
 					$_SESSION['loggedin'] = true;
 					$_SESSION['user_email'] = $_POST["emailInput"];
+					$_SESSION['account_type'] = "Instructor";
 					$valid = TRUE;
 					header("Location: teacherview.php");
 					exit();
@@ -55,7 +57,7 @@ try{
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.82.0">
-    <title>Landing Page</title>
+    <title>Sign in</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
